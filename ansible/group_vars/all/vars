@@ -1,0 +1,21 @@
+---
+project_slug: ioi-game
+app_dir: /var/www/ioi-game
+venv_dir: /opt/venv/ioi-game/
+db_name: ioi-game
+db_user: ioi-game
+db_host: 127.0.0.1
+db_port: 5432
+web_root: /var/www/ioi-game.com/
+django_allowed_host:
+  - staging.ioi-game.com
+django_server_email: postmaster@ioi-game.com
+django_settings_module: config.settings.production
+# if URL is absolute set domain in web vars
+django_static_url: /static/
+# if URL is absolute set domain in web vars
+django_media_url: /media/
+l2_domain: ioi-game.com
+l3_domain: staging.ioi-game.com
+socket_path: /var/run/
+socket_file: ioi-game.socket

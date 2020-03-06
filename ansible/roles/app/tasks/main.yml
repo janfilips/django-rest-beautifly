@@ -1,0 +1,60 @@
+---
+- name: clone or update from git repository
+  git:
+    repo: "git@github.com:{{ github_repo }}.git"
+    dest: "{{ app_dir }}"
+
+- name: pip install python packages to virtual environment
+  pip:
+    requirements: "{{ app_dir }}requirements.txt"
+    virtualenv: "{{ venv_dir }}"
+    virtualenv_python: /usr/bin/python3
+
+- name: create new "postactivate" file in virtual environment
+  template:
+    src: postactivate.j2
+    dest: "{{ venv_dir }}bin/postactivate"
+    mode: 0644
+
+- name: create .env config
+  template:
+    src: env.j2
+    dest: "{{ app_dir }}.env"
+    mode: 0644
+
+- name: install systemd socket unit file
+  template:
+    src: systemd.socket.j2
+    dest: "{{ app_dir }}{{ project_slug }}.socket"
+    mode: 0644
+  notify: restart systemd service
+
+- name: create symlink to socket unit file
+  file:
+    src: "{{ app_dir }}{{ project_slug }}.socket"
+    dest: /etc/systemd/system/{{ project_slug }}.socket
+    state: link
+  become: true
+  become_user: root
+  notify: restart systemd service
+
+- name: install systemd service unit file
+  template:
+    src: systemd.service.j2
+    dest: "{{ app_dir }}{{ project_slug }}.service"
+    mode: 0644
+  notify: restart systemd service
+
+- name: create symlink to service unit file
+  file:
+    src: "{{ app_dir }}{{ project_slug }}.service"
+    dest: /etc/systemd/system/{{ project_slug }}.service
+    state: link
+  become: true
+  become_user: root
+  notify: restart systemd service
+
+- name: start app service
+  systemd: state=started name={{ project_slug }}.service daemon_reload=yes
+  become: true
+  become_user: root

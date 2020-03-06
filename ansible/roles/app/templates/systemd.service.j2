@@ -1,0 +1,24 @@
+[Unit]
+Description={{ l3_domain }} app daemon
+After=network.target postgresql.service
+Requires=postgresql.service {{ socket_file }}
+Conflicts=shutdown.target reboot.target halt.target
+
+[Service]
+PIDFile={{ app_dir }}pid
+User=webmanager
+Group=webmanager
+WorkingDirectory={{ app_dir }}
+EnvironmentFile={{ app_dir }}.env
+Restart=always
+
+ExecStart={{ venv_dir }}bin/python {{ venv_dir }}bin/gunicorn \
+        --access-logfile - \
+        --pid {{ app_dir }}pid \
+        --bind unix:{{ socket_path }}{{ socket_file }} \
+        config.wsgi:application
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s TERM $MAINPID
+
+[Install]
+WantedBy=multi-user.target

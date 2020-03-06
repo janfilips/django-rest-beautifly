@@ -1,0 +1,8 @@
+[app]
+staging.ioi-game.com
+
+[db]
+staging.ioi-game.com
+
+[web]
+staging.ioi-game.com

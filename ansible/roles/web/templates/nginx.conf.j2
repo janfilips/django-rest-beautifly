@@ -1,0 +1,81 @@
+# {{ ansible_managed }}
+{% set media_absolute = django_media_url|truncate(4, True, "") == "http" %}
+{% set static_absolute = django_static_url|truncate(4, True, "") == "http" %}
+
+server {
+	listen {{ web_listen_ip }}:80;
+	server_name {{ l2_domain }};
+	return 301 https://{{ l3_domain }}$request_uri;
+}
+
+server {
+	listen {{ web_listen_ip }}:443 ssl;
+	server_name {{ l2_domain }};
+	return 301 https://{{ l3_domain }}$request_uri;
+
+	ssl on;
+	ssl_certificate {{ ssl_certificate }};
+	ssl_certificate_key {{ ssl_certificate_key }};
+	ssl_session_cache shared:SSL:50m;
+	ssl_session_timeout 5m;
+}
+
+server {
+	listen {{ web_listen_ip }}:80;
+	listen {{ web_listen_ip }}:443 ssl;
+	server_name {{ django_allowed_host|join(" ") }};
+	root {{ web_root }};
+
+	ssl on;
+	ssl_certificate {{ ssl_certificate }};
+	ssl_certificate_key {{ ssl_certificate_key }};
+	ssl_session_cache shared:SSL:50m;
+	ssl_session_timeout 5m;
+
+	location ^~ /.well-known/ {
+		root {{ web_root }}letsencrypt/;
+	}
+
+	if ($host !~* ^{{ l3_domain }}$) {
+		return 444;
+	}
+
+	{% if not media_absolute %}location {{ django_media_url }} {
+		expires 1M;
+		access_log off;
+		add_header Cache-Control "public";
+	}{% endif %}
+
+	{% if not static_absolute %}location {{ django_static_url }} {
+		expires 1M;
+		access_log off;
+		add_header Cache-Control "public";
+	}{% endif %}
+
+	location / {
+		proxy_set_header X-Real-IP  $remote_addr;
+		proxy_set_header Host $host;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+		proxy_set_header X-Forwarded-Proto $scheme;
+		proxy_pass http://unix:{{ socket_path }}{{ socket_file }};
+	}
+}
+{% if media_absolute %}
+
+server {
+	listen {{ web_listen_ip }}:80;
+	server_name {{ web_media_domain }};
+	root {{ web_root }}media/;
+	expires 1M;
+	access_log off;
+	add_header Cache-Control "public";
+}{% endif %}{% if static_absolute %}
+
+server {
+	listen {{ web_listen_ip }}:80;
+	server_name {{ web_static_domain }};
+	root {{ web_root }}static/;
+	expires 1M;
+	access_log off;
+	add_header Cache-Control "public";
+}{% endif %}

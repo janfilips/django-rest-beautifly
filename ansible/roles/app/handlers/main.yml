@@ -1,0 +1,9 @@
+---
+
+- name: restart systemd service
+  service:
+    name: "{{ project_slug }}.service"
+    daemon_reload: yes
+    state: restarted
+  become: true
+  become_user: root

@@ -1,0 +1,14 @@
+django>=2.2,<3.0
+django-environ==0.4.5
+django-registration==3.1
+djangorestframework==3.11.0
+djangorestframework-jwt==1.11.0
+djangorestframework-simplejwt==4.4.0
+djoser==2.0.3  # REST implementation of Django authentication system
+drf-yasg==1.17.1  # Swagger/Open API library
+social==0.1.dev3
+social-auth-app-django==3.1.0
+binance==0.3
+psycopg2==2.8.4
+pusher==2.1.4 # fe/be notifications
+django-cors-headers==3.2.1

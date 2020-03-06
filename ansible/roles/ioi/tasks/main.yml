@@ -1,0 +1,6 @@
+---
+- name: create .env config
+  template:
+    src: env.j2
+    dest: "/var/www/ioi-game/.env"
+    mode: 0644

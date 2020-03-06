@@ -1,0 +1,8 @@
+[Unit]
+Description={{ l3_domain }} socket
+
+[Socket]
+ListenStream={{ socket_path }}{{ socket_file }}
+
+[Install]
+WantedBy=sockets.target

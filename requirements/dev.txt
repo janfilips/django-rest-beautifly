@@ -1,0 +1,4 @@
+-r base.txt
+factory_boy
+pytest
+pytest-django

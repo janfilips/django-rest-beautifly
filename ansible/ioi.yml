@@ -1,0 +1,5 @@
+---
+# file: app.yml
+- hosts: app
+  roles:
+    - ioi

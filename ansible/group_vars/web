@@ -1,0 +1,6 @@
+---
+web_listen_ip: 212.57.35.21
+web_static_domain: ""
+web_media_domain: ""
+ssl_certificate: /etc/letsencrypt/live/ioi-game.com/fullchain.pem
+ssl_certificate_key: /etc/letsencrypt/live/ioi-game.com/privkey.pem

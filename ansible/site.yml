@@ -1,0 +1,7 @@
+---
+# file: site.yml
+- hosts: all
+  gather_facts: false
+
+- include: app.yml
+- include: web.yml

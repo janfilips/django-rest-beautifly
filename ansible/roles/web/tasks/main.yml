@@ -1,0 +1,14 @@
+---
+- name: create nginx config file
+  template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/sites-available/{{ l3_domain }}
+    mode: 0644
+  notify: reload nginx
+
+- name: create symlink to nginx config file
+  file:
+    src: /etc/nginx/sites-available/{{ l3_domain }}
+    dest: /etc/nginx/sites-enabled/{{ l3_domain }}
+    state: link
+  notify: reload nginx

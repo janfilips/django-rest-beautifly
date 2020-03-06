@@ -1,0 +1,6 @@
+---
+# file: web.yml
+- hosts: web
+  become: true
+  roles:
+    - web
