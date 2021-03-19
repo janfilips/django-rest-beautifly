@@ -1,7 +1,7 @@
 django>=2.2,<3.0
 django-environ==0.4.5
 django-registration==3.1
-djangorestframework==3.11.0
+djangorestframework==3.11.2
 djangorestframework-jwt==1.11.0
 djangorestframework-simplejwt==4.4.0
 djoser==2.0.3  # REST implementation of Django authentication system
