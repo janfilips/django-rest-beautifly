@@ -1,8 +1,3 @@
-# ioi-game
-
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/4069ca481ad64ea196947ef42974a518)](https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ioi-game/ioi-game&amp;utm_campaign=Badge_Grade)
-
-
 ## Notes on configuration
 
 Nginx config must contain -
